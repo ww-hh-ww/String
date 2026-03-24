@@ -1,15 +1,20 @@
 cmake_minimum_required(VERSION 3.10.0)
-project(String VERSION 0.1.0 LANGUAGES C CXX)
+project(String_on_class VERSION 0.1.0 LANGUAGES C CXX)
 
-# 指定头文件目录（让编译器能找到 #include "Game.h"）
-include_directories(${PROJECT_SOURCE_DIR}/include)
+# 1. 定义源文件列表（把所有 .cpp 都列在这里）
+set(SOURCES
+    "main.cpp"
+    "src/StringBuilder.cpp"
+)
 
-# 自动收集 src 目录下的所有 .cpp 文件
-file(GLOB SOURCES "src/*.cpp")
+# 2. 创建可执行程序
+add_executable(String_on_class ${SOURCES})
 
-# 如果 main.cpp 在根目录，也加入
-list(APPEND SOURCES "main.cpp")
-add_executable(String ${SOURCES})
+# 3. 现代写法：将头文件目录关联到目标（Target）
+# 这样编译器就知道去哪里找 String.h 和 StringBuilder.h 了
+target_include_directories(String_on_class PRIVATE 
+    include
+)
 
 include(CTest)
 enable_testing()
