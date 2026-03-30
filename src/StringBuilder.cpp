@@ -17,22 +17,22 @@
 			char* newStr = new char[newCapacity];
 			if (str && copyOldStr) {
 				strcpy_s(newStr, newCapacity, str);
-				delete[] str;
 			}
+			delete[] str;
 			str = newStr;
 			capacity = newCapacity;
 		}
 		else if (autoShrink && newLength < capacity / growthFactor - 1) {
 			// 缩容
 			int newCapacity = capacity;
-			while (newCapacity > newLength && newCapacity > 0) {
+			while (newCapacity > newLength && newCapacity > 0 && static_cast<int>(newCapacity / growthFactor) > newLength) {
 				newCapacity = static_cast<int>(newCapacity / growthFactor);
 			}
 			char* newStr = new char[newCapacity];
 			if (str && copyOldStr) {
 				strcpy_s(newStr, newCapacity, str);
-				delete[] str;
 			}
+			delete[] str;
 			str = newStr;
 			capacity = newCapacity;
 		}
@@ -122,8 +122,9 @@ StringBuilder& StringBuilder::operator=(const StringBuilder& other) {
 
 StringBuilder& StringBuilder::operator+=(const StringBuilder& other) 
 {
-	int length = length + other.length;
-	resize(length, true);
+	int newLength = length + other.length;
+	resize(newLength, true);
 	strcat_s(str, capacity, other.str);
+	length = newLength;
 	return *this;
 }
